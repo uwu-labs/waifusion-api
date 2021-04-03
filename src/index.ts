@@ -2,7 +2,8 @@ import fastify from "fastify";
 import request from "./hooks/request";
 import infura from "./modules/infura";
 import waifuData from "./modules/waifuData";
-import waifus from "./routes/opensea";
+import opensea from "./routes/opensea";
+import waifus from "./routes/waifus";
 import {IWaifusionInstance} from './types/Fastify';
 import { debug } from "./util/logger";
 
@@ -17,7 +18,7 @@ app.register(request);
 
 // Register plugins
 app.register(waifus, { prefix: "/v1/waifus" });
-app.register(waifus, { prefix: "/v1/opensea" });
+app.register(opensea, { prefix: "/v1/opensea" });
 
 app.listen(process.env.PORT || 8080, "0.0.0.0", (err) => {
   if (err) {

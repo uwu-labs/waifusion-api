@@ -14,5 +14,11 @@ export interface IWaifusionRequest extends FastifyRequest {
 }
 
 export interface IWaifusionReply extends FastifyReply {
+  success: (data?: any) => void;
+  error: (error: Error) => void;
+}
 
+export interface Error {
+  code: string,
+  message: string
 }

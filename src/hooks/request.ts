@@ -1,14 +1,22 @@
-import { IWaifusionInstance, IWaifusionReply, IWaifusionRequest } from "../types/Fastify";
+import { Error, IWaifusionInstance, IWaifusionReply, IWaifusionRequest } from "../types/Fastify";
 import fp from "fastify-plugin";
 
-export default fp((fastify: IWaifusionInstance, _opts: any, next: any) => {
+export default fp((fastify: IWaifusionInstance, _opts: any, nextPlugin: any) => {
   fastify.addHook(
     "preHandler",
-    async (req: IWaifusionRequest, _reply: IWaifusionReply, next: () => void) => {
+    async (req: IWaifusionRequest, reply: IWaifusionReply, next: () => void) => {
       req.fastify = fastify;
+
+      reply.success = (data?: any) => {
+        return reply.send(data ? { success: true, data } : { success: true });
+      };
+
+      reply.error = (error: Error) => {
+        return reply.send({ success: false, error: error });
+      };
 
       next();
     });
 
-  next();
+    nextPlugin();
 });
