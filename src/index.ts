@@ -7,7 +7,7 @@ import waifus from "./routes/waifus";
 import {IWaifusionInstance} from './types/Fastify';
 import { debug } from "./util/logger";
 
-const app: IWaifusionInstance = fastify();
+export const app: IWaifusionInstance = fastify();
 
 // Register plugins
 app.register(infura);
