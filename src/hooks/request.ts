@@ -11,8 +11,8 @@ export default fp((fastify: IWaifusionInstance, _opts: any, nextPlugin: any) => 
         return reply.send(data ? { success: true, data } : { success: true });
       };
 
-      reply.error = (error: Error) => {
-        return reply.send({ success: false, error: error });
+      reply.error = (statusCode: number, error: Error) => {
+        return reply.status(statusCode).send({ success: false, error: error });
       };
 
       next();

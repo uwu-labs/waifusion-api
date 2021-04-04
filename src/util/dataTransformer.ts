@@ -1,31 +1,23 @@
-import { WaifuScrabeDataObject } from "../types/ScrapeData";
+import { WaifuScrabeDataAttributes, WaifuScrabeDataObject } from "../types/ScrapeData";
 import { IWaifu, IWaifuAttribute } from "../types/Waifusion";
 import Config from "../config.json";
 import { app } from "..";
 
-export const createWaifuObjectFromScrapeDataObject = async (waifuId: string, fetchName?: boolean): IWaifu => {
+export const createWaifuObjectFromScrapeDataObject = async (waifuId: string, fetchName?: boolean, prefilledObject?: WaifuScrabeDataObject): Promise<IWaifu> => {
   const revealedTokenIndex = (Number(waifuId) + Config.STARTING_INDEX) % 16384;
 
-  let name = "";
-  if(fetchName) {
-    name = await app.waifusContract.methods
-    .tokenNameByIndex(waifuId)
-    .call({});
-  }
+  const name = fetchName ? await app.waifusContract.methods
+  .tokenNameByIndex(waifuId)
+  .call({}) :  "";
 
-  const { attributes } = app.getWaifuByRevealedIndex(
+  const { attributes } = prefilledObject || app.getWaifuByRevealedIndex(
     revealedTokenIndex
   );
 
-  const formattedAttributes: any[] = Object.entries(attributes).map(([trait_type, value]) => {
-    return {
-      trait_type,
-      value
-    }
-  });
+  const formattedAttributes: any[] = formatAttributesFromScrape(attributes);
 
-  const imageUrl = `${Config.HAREM_CDN_PREFIX}/ETH_WAIFU/${revealedTokenIndex}.png`;
-  const detailUrl = `https://waifusion.io/waifu/${revealedTokenIndex}`;
+  const imageUrl = `${Config.HAREM_CDN_PREFIX}/ETH_WAIFU/${waifuId}.png`;
+  const detailUrl = `https://waifusion.io/waifu/${waifuId}`;
 
   return {
     id: waifuId,
@@ -34,4 +26,13 @@ export const createWaifuObjectFromScrapeDataObject = async (waifuId: string, fet
     external_url: detailUrl,
     attributes: formattedAttributes
   }
+}
+
+export const formatAttributesFromScrape = (legacyAttributes: WaifuScrabeDataAttributes) => {
+  return Object.entries(legacyAttributes).map(([trait_type, value]) => {
+    return {
+      trait_type,
+      value
+    }
+  });
 }
