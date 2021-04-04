@@ -185,6 +185,12 @@
   dependencies:
     "@types/node" "*"
 
+"@types/fastify-cors@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/fastify-cors/-/fastify-cors-2.1.0.tgz#cf09d8f2726c23a6eca8149de26ab19f80bfcbb4"
+  dependencies:
+    fastify-cors "*"
+
 "@types/node@*", "@types/node@^14.14.35":
   version "14.14.35"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.35.tgz#42c953a4e2b18ab931f72477e7012172f4ffa313"
@@ -945,6 +951,13 @@ fast-redact@^3.0.0:
 fast-safe-stringify@^2.0.7:
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.0.7.tgz#124aa885899261f68aedb42a7c080de9da608743"
+
+fastify-cors@*, fastify-cors@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/fastify-cors/-/fastify-cors-5.2.0.tgz#a92af64d9b7df1cd736c90ecd894a7b23c0cd75a"
+  dependencies:
+    fastify-plugin "^3.0.0"
+    vary "^1.1.2"
 
 fastify-error@^0.3.0:
   version "0.3.0"
@@ -2230,7 +2243,7 @@ varint@^5.0.0:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/varint/-/varint-5.0.2.tgz#5b47f8a947eb668b848e034dcfa87d0ff8a7f7a4"
 
-vary@^1, vary@~1.1.2:
+vary@^1, vary@^1.1.2, vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
 

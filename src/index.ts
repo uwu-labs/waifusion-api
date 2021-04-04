@@ -1,4 +1,5 @@
 import fastify from "fastify";
+import * as fastifyCORS from "fastify-cors";
 import request from "./hooks/request";
 import infura from "./modules/infura";
 import waifuData from "./modules/waifuData";
@@ -12,11 +13,17 @@ export const app: IWaifusionInstance = fastify();
 // Register plugins
 app.register(infura);
 app.register(waifuData);
+// @ts-ignore
+app.register(fastifyCORS, {
+  maxAge: 600,
+  origin: true,
+  credentials: true,
+});
 
 // Register hooks
 app.register(request);
 
-// Register plugins
+// Register routes
 app.register(waifus, { prefix: "/v1/waifus" });
 app.register(opensea, { prefix: "/v1/opensea" });
 
