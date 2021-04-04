@@ -37,8 +37,13 @@ export const filterWaifus = async (
   }
 
   const filteredFullList = req.fastify.waifusData.filter((waifu) => {
-    return Object.entries(waifu.attributes).every(([k, v]) =>
-      filterParams[k] ? filterParams[k] === v : true
+    return (
+      Object.keys(waifu.attributes).some((k) =>
+        Object.keys(filterParams).includes(k)
+      ) &&
+      Object.entries(waifu.attributes).every(([k, v]) =>
+        filterParams[k] ? filterParams[k] === v : true
+      )
     );
   });
 
@@ -62,9 +67,9 @@ export const filterWaifus = async (
 
   reply.success({
     page: parseInt(page),
-    maxPage: Math.floor(concentratedList.length / limit) + 1,
+    maxPage: Math.floor(filteredFullList.length / parseInt(limit)) + 1,
     maxResults: filteredFullList.length,
-    limit,
+    limit: parseInt(limit),
     results: concentratedList,
   });
 };
