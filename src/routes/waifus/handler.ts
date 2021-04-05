@@ -36,7 +36,7 @@ export const filterWaifus = async (
     });
   }
 
-  const filteredFullList = req.fastify.waifusData.filter((waifu) => {
+  const filteredFullList = Object.keys(filterParams).length ? req.fastify.waifusData.filter((waifu) => {
     return (
       Object.keys(waifu.attributes).some((k) =>
         Object.keys(filterParams).includes(k)
@@ -45,7 +45,7 @@ export const filterWaifus = async (
         filterParams[k] ? filterParams[k] === v : true
       )
     );
-  });
+  }) : req.fastify.waifusData;
 
   const concentratedList = await Promise.all(
     filteredFullList
