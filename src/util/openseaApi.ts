@@ -1,4 +1,5 @@
-import Config from '../config.json';
+import fetch from 'node-fetch';
+import Config from "../config.json";
 
 const API_BASE = "https://api.opensea.io/api/v1/";
 
@@ -38,11 +39,9 @@ export const makeRequest = async (
         : outboundBody && method !== "GET" && method !== "HEAD"
         ? JSON.stringify(outboundBody)
         : null,
-    }).then(async (res) =>
-      res.json()
-    );
+    }).then(async (res) => res.json());
 
-   return {success: true, data: response};
+    return { success: true, data: response };
   } catch (error) {
     console.error(error);
 
@@ -51,7 +50,10 @@ export const makeRequest = async (
 };
 
 export const getAsset = async (tokenId: string) => {
-  return await makeRequest(`assets?asset_contract_address=${Config.WAIFUS_CONTRACT_ADDRESS}&limit=50&token_ids=${tokenId}`, {
-    method: "GET",
-  });
-}
+  return await makeRequest(
+    `assets?asset_contract_address=${Config.WAIFUS_CONTRACT_ADDRESS}&limit=50&token_ids=${tokenId}`,
+    {
+      method: "GET",
+    }
+  );
+};
