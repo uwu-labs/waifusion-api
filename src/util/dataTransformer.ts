@@ -45,7 +45,7 @@ export const getOwnerObjectForTokenId = async (tokenId: string): Promise<IWaifuO
 
   return {
     address: owner.address,
-    name: owner.user.username,
+    name: owner.user?.username,
     icon: null
   }
 };
