@@ -9,10 +9,14 @@ import { getAsset } from "./openseaApi";
 
 export const createWaifuObjectFromScrapeDataObject = async (
   waifuId: string,
+  bsc: boolean,
   fetchExternal?: boolean,
   prefilledObject?: WaifuScrabeDataObject
 ): Promise<IWaifu> => {
-  const revealedTokenIndex = (Number(waifuId) + Config.STARTING_INDEX) % 16384;
+  const revealedTokenIndex =
+    (Number(waifuId) +
+      (bsc ? Config.BSC.STARTING_INDEX : Config.ETH.STARTING_INDEX)) %
+    16384;
 
   const name = fetchExternal
     ? await app.waifusContract.methods.tokenNameByIndex(waifuId).call({})
@@ -25,7 +29,7 @@ export const createWaifuObjectFromScrapeDataObject = async (
 
   const formattedAttributes: any[] = formatAttributesFromScrape(attributes);
 
-  const imageUrl = `${Config.HAREM_CDN_PREFIX}/ETH_WAIFU/${waifuId}.png`;
+  const imageUrl = `${Config.ETH.HAREM_CDN_PREFIX}/ETH_WAIFU/${waifuId}.png`;
   const detailUrl = `https://waifusion.io/waifu/${waifuId}`;
 
   return {
@@ -38,16 +42,20 @@ export const createWaifuObjectFromScrapeDataObject = async (
   };
 };
 
-export const getOwnerObjectForTokenId = async (tokenId: string): Promise<IWaifuOwner> => {
+export const getOwnerObjectForTokenId = async (
+  tokenId: string
+): Promise<IWaifuOwner> => {
   const {
-    data: {assets: [{owner}]},
+    data: {
+      assets: [{ owner }],
+    },
   } = await getAsset(tokenId);
 
   return {
     address: owner.address,
     name: owner.user?.username,
-    icon: null
-  }
+    icon: null,
+  };
 };
 
 export const formatAttributesFromScrape = (
