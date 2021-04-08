@@ -8,6 +8,20 @@ export const getWaifuByTokenId = async (
 ) => {
   const waifu = await createWaifuObjectFromScrapeDataObject(
     req.params.waifuId,
+    false,
+    true
+  );
+
+  reply.success(waifu);
+};
+
+export const getBscWaifuByTokenId = async (
+  req: IWaifusionRequest,
+  reply: IWaifusionReply
+) => {
+  const waifu = await createWaifuObjectFromScrapeDataObject(
+    req.params.waifuId,
+    true,
     true
   );
 
@@ -36,16 +50,18 @@ export const filterWaifus = async (
     });
   }
 
-  const filteredFullList = Object.keys(filterParams).length ? req.fastify.waifusData.filter((waifu) => {
-    return (
-      Object.keys(waifu.attributes).some((k) =>
-        Object.keys(filterParams).includes(k)
-      ) &&
-      Object.entries(waifu.attributes).every(([k, v]) =>
-        filterParams[k] ? filterParams[k] === v : true
-      )
-    );
-  }) : req.fastify.waifusData;
+  const filteredFullList = Object.keys(filterParams).length
+    ? req.fastify.waifusData.filter((waifu) => {
+        return (
+          Object.keys(waifu.attributes).some((k) =>
+            Object.keys(filterParams).includes(k)
+          ) &&
+          Object.entries(waifu.attributes).every(([k, v]) =>
+            filterParams[k] ? filterParams[k] === v : true
+          )
+        );
+      })
+    : req.fastify.waifusData;
 
   const concentratedList = await Promise.all(
     filteredFullList
@@ -54,7 +70,7 @@ export const filterWaifus = async (
         parseInt(page) * parseInt(limit)
       )
       .map(async (legacyWaifu) => {
-        const index = Number(legacyWaifu.index) - Config.STARTING_INDEX;
+        const index = Number(legacyWaifu.index) - Config.ETH.STARTING_INDEX;
         const nudged = index < 0 ? index + 16384 : index;
 
         return createWaifuObjectFromScrapeDataObject(
