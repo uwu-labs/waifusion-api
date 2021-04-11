@@ -3,11 +3,10 @@ import { FastifyPluginOptions } from "fastify";
 import fp from "fastify-plugin";
 import Web3 from "web3";
 import fs from "fs";
-import WaifuContractABI from "../data/abi/Waifus.json";
 import Config from "../config.json";
 
 const waifusContractJson = fs.readFileSync(
-  __dirname + "/../data/abi/Waifus.json"
+  __dirname + "/../../data/abi/Waifus.json"
 );
 const waifusContractAbi = JSON.parse(waifusContractJson.toString());
 

@@ -3,17 +3,17 @@ import { FastifyPluginOptions } from "fastify";
 import fp from "fastify-plugin";
 import fs from "fs";
 import path from "path";
-import WaifuData from '../data/waifu_attribute_scrape_2.json';
-import BSCWaifuData from '../data/bsc_attribute_scrape.json';
-import WaifuProvenanceData from '../data/eth_provenance.json';
+// import WaifuData from '../data/waifu_attribute_scrape_2.json';
+// import BSCWaifuData from '../data/bsc_attribute_scrape.json';
+// import WaifuProvenanceData from '../data/eth_provenance.json';
 
-const waifusDataFile = fs.readFileSync(path.join(__dirname, "/../data/waifu_attribute_scrape_2.json"));
+const waifusDataFile = fs.readFileSync(path.join(__dirname, "/../../data/waifu_attribute_scrape_2.json"));
 const waifusData = JSON.parse(waifusDataFile.toString());
 
-const bscWaifusDataFile = fs.readFileSync(path.join(__dirname, "/../data/bsc_attribute_scrape.json"));
+const bscWaifusDataFile = fs.readFileSync(path.join(__dirname, "/../../data/bsc_attribute_scrape.json"));
 const bscWaifusData = JSON.parse(bscWaifusDataFile.toString());
 
-const waifusProvenanceDataFile = fs.readFileSync(path.join(__dirname, "/../data/eth_provenance.json"));
+const waifusProvenanceDataFile = fs.readFileSync(path.join(__dirname, "/../../data/eth_provenance.json"));
 const waifusProvenanceData = JSON.parse(waifusProvenanceDataFile.toString());
 
 const getWaifuByRevealedIndex = (index: number) => {
