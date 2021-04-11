@@ -4,6 +4,7 @@ import fp from "fastify-plugin";
 import fs from "fs";
 import path from "path";
 import WaifuData from '../data/waifu_attribute_scrape_2.json';
+import BSCWaifuData from '../data/bsc_attribute_scrape.json';
 import WaifuProvenanceData from '../data/eth_provenance.json';
 
 const waifusDataFile = fs.readFileSync(path.join(__dirname, "/../data/waifu_attribute_scrape_2.json"));
