@@ -14,23 +14,23 @@ export const createWaifuObjectFromScrapeDataObject = async (
   prefilledObject?: WaifuScrabeDataObject
 ): Promise<IWaifu> => {
   const revealedTokenIndex =
-    (Number(waifuId) +
-      (bsc ? Config.BSC.STARTING_INDEX : Config.ETH.STARTING_INDEX)) %
-    16384;
+    (Number(waifuId) + Config[bsc ? "BSC" : "ETH"].STARTING_INDEX) % 16384;
 
+  const waifuContract = bsc ? app.bscWaifusContract : app.waifusContract;
   const name = fetchExternal
-    ? await app.waifusContract.methods.tokenNameByIndex(waifuId).call({})
+    ? await waifuContract.methods.tokenNameByIndex(waifuId).call({})
     : "";
 
-  const owner = fetchExternal ? await getOwnerObjectForTokenId(waifuId) : null;
+  const owner = fetchExternal && bsc ? await getOwnerObjectForTokenId(waifuId) : null;
 
-  const { attributes } =
-    prefilledObject || app.getWaifuByRevealedIndex(revealedTokenIndex);
+  const { attributes } = prefilledObject || (bsc ? 
+    app.getBSCWaifuByRevealedIndex(revealedTokenIndex) : app.getWaifuByRevealedIndex(revealedTokenIndex)
+  );
 
   const formattedAttributes: any[] = formatAttributesFromScrape(attributes);
 
-  const imageUrl = `${Config.ETH.HAREM_CDN_PREFIX}/ETH_WAIFU/${waifuId}.png`;
-  const detailUrl = `https://waifusion.io/waifu/${waifuId}`;
+  const imageUrl = `${Config[bsc ? "BSC" : "ETH"].HAREM_CDN_PREFIX}/${waifuId}.png`;
+  const detailUrl = bsc ? `https://waifusion.io/waifu/${waifuId}` : `https://waifusionbsc.sexy/app/detail/${waifuId}`;
 
   return {
     id: waifuId,
@@ -43,7 +43,7 @@ export const createWaifuObjectFromScrapeDataObject = async (
 };
 
 export const getOwnerObjectForTokenId = async (
-  tokenId: string
+  tokenId: string,
 ): Promise<IWaifuOwner> => {
   const {
     data: {

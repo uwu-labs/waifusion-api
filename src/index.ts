@@ -2,6 +2,7 @@ import fastify from "fastify";
 import * as fastifyCORS from "fastify-cors";
 import request from "./hooks/request";
 import infura from "./modules/infura";
+import bscrpc from "./modules/bscrpc";
 import waifuData from "./modules/waifuData";
 import opensea from "./routes/opensea";
 import waifus from "./routes/waifus";
@@ -12,6 +13,7 @@ export const app: IWaifusionInstance = fastify();
 
 // Register plugins
 app.register(infura);
+app.register(bscrpc);
 app.register(waifuData);
 // @ts-ignore
 app.register(fastifyCORS, {

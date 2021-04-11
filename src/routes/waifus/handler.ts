@@ -22,7 +22,7 @@ export const getBscWaifuByTokenId = async (
   const waifu = await createWaifuObjectFromScrapeDataObject(
     req.params.waifuId,
     true,
-    true
+    false
   );
 
   reply.success(waifu);
@@ -75,6 +75,7 @@ export const filterWaifus = async (
 
         return createWaifuObjectFromScrapeDataObject(
           nudged.toString(),
+          false,
           false,
           legacyWaifu
         );
