@@ -5,8 +5,11 @@ import { Contract } from "web3-eth-contract";
 
 export interface IWaifusionInstance extends FastifyInstance {
   web3?: Web3;
+  bscWeb3?: Web3;
   waifusContract?: Contract;
+  bscWaifusContract?: Contract;
   getWaifuByRevealedIndex?: (index: number) => any;
+  getBSCWaifuByRevealedIndex?: (index: number) => any;
   waifusData?: WaifuScrabeDataObject[];
 }
 

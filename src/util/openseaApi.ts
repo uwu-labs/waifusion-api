@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
 import Config from "../config.json";
 
 const API_BASE = "https://api.opensea.io/api/v1/";
@@ -51,7 +51,7 @@ export const makeRequest = async (
 
 export const getAsset = async (tokenId: string) => {
   return await makeRequest(
-    `assets?asset_contract_address=${Config.WAIFUS_CONTRACT_ADDRESS}&limit=50&token_ids=${tokenId}`,
+    `assets?asset_contract_address=${Config.ETH.WAIFUS_CONTRACT_ADDRESS}&limit=50&token_ids=${tokenId}`,
     {
       method: "GET",
     }

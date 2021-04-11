@@ -9,24 +9,28 @@ import { getAsset } from "./openseaApi";
 
 export const createWaifuObjectFromScrapeDataObject = async (
   waifuId: string,
+  bsc: boolean,
   fetchExternal?: boolean,
   prefilledObject?: WaifuScrabeDataObject
 ): Promise<IWaifu> => {
-  const revealedTokenIndex = (Number(waifuId) + Config.STARTING_INDEX) % 16384;
+  const revealedTokenIndex =
+    (Number(waifuId) + Config[bsc ? "BSC" : "ETH"].STARTING_INDEX) % 16384;
 
+  const waifuContract = bsc ? app.bscWaifusContract : app.waifusContract;
   const name = fetchExternal
-    ? await app.waifusContract.methods.tokenNameByIndex(waifuId).call({})
+    ? await waifuContract.methods.tokenNameByIndex(waifuId).call({})
     : "";
 
-  const owner = fetchExternal ? await getOwnerObjectForTokenId(waifuId) : null;
+  const owner = fetchExternal && bsc ? await getOwnerObjectForTokenId(waifuId) : null;
 
-  const { attributes } =
-    prefilledObject || app.getWaifuByRevealedIndex(revealedTokenIndex);
+  const { attributes } = prefilledObject || (bsc ? 
+    app.getBSCWaifuByRevealedIndex(revealedTokenIndex) : app.getWaifuByRevealedIndex(revealedTokenIndex)
+  );
 
-  const formattedAttributes: any[] = formatAttributesFromScrape(attributes);
+  const formattedAttributes: any[] = bsc ? attributes.filter((atr: IWaifuAttribute) => atr.value) : formatAttributesFromScrape(attributes);
 
-  const imageUrl = `${Config.HAREM_CDN_PREFIX}/ETH_WAIFU/${waifuId}.png`;
-  const detailUrl = `https://waifusion.io/waifu/${waifuId}`;
+  const imageUrl = `${Config[bsc ? "BSC" : "ETH"].HAREM_CDN_PREFIX}/${waifuId}.png`;
+  const detailUrl = !bsc ? `https://waifusion.io/waifu/${waifuId}` : `https://waifusionbsc.sexy/app/detail/${waifuId}`;
 
   return {
     id: waifuId,
@@ -38,16 +42,20 @@ export const createWaifuObjectFromScrapeDataObject = async (
   };
 };
 
-export const getOwnerObjectForTokenId = async (tokenId: string): Promise<IWaifuOwner> => {
+export const getOwnerObjectForTokenId = async (
+  tokenId: string,
+): Promise<IWaifuOwner> => {
   const {
-    data: {assets: [{owner}]},
+    data: {
+      assets: [{ owner }],
+    },
   } = await getAsset(tokenId);
 
   return {
     address: owner.address,
-    name: owner.user?.username,
-    icon: null
-  }
+    name: owner.user?.username || null,
+    icon: null,
+  };
 };
 
 export const formatAttributesFromScrape = (
