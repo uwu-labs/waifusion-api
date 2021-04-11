@@ -27,10 +27,10 @@ export const createWaifuObjectFromScrapeDataObject = async (
     app.getBSCWaifuByRevealedIndex(revealedTokenIndex) : app.getWaifuByRevealedIndex(revealedTokenIndex)
   );
 
-  const formattedAttributes: any[] = formatAttributesFromScrape(attributes);
+  const formattedAttributes: any[] = bsc ? attributes.filter((atr: IWaifuAttribute) => atr.value) : formatAttributesFromScrape(attributes);
 
   const imageUrl = `${Config[bsc ? "BSC" : "ETH"].HAREM_CDN_PREFIX}/${waifuId}.png`;
-  const detailUrl = bsc ? `https://waifusion.io/waifu/${waifuId}` : `https://waifusionbsc.sexy/app/detail/${waifuId}`;
+  const detailUrl = !bsc ? `https://waifusion.io/waifu/${waifuId}` : `https://waifusionbsc.sexy/app/detail/${waifuId}`;
 
   return {
     id: waifuId,
@@ -53,7 +53,7 @@ export const getOwnerObjectForTokenId = async (
 
   return {
     address: owner.address,
-    name: owner.user?.username,
+    name: owner.user?.username || null,
     icon: null,
   };
 };
