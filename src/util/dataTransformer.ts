@@ -24,7 +24,7 @@ export const createWaifuObjectFromScrapeDataObject = async (
   const owner = fetchExternal && bsc ? await getOwnerObjectForTokenId(waifuId) : null;
 
   const { attributes } = prefilledObject || (bsc ? 
-    app.getBSCWaifuByRevealedIndex(revealedTokenIndex) : app.getWaifuByRevealedIndex(revealedTokenIndex)
+    app.getBSCWaifuByRevealedIndex(Number(waifuId)) : app.getWaifuByRevealedIndex(revealedTokenIndex)
   );
 
   const formattedAttributes: any[] = bsc ? attributes.filter((atr: IWaifuAttribute) => atr.value) : formatAttributesFromScrape(attributes);
