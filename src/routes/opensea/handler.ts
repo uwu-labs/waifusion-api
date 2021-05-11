@@ -22,7 +22,7 @@ export const getWaifuByTokenId = async (
     
   const openSeaFormattedAttributes: any[] = Object.entries(attributes).map(
     ([trait_type, value]) => {
-      value = ownerAddr == "0x0000000000000000000000000000000000080085" ? "burned" : value;
+      value = ownerAddr === "0x0000000000000000000000000000000000080085" ? "burned" : value;
       return {
         trait_type,
         value,
@@ -31,9 +31,9 @@ export const getWaifuByTokenId = async (
   );
 
   let status = "freed" 
-  if (ownerAddr == "0x0000000000000000000000000000000000080085") {
+  if (ownerAddr === "0x0000000000000000000000000000000000080085") {
     status = "burned"
-  } else if (ownerAddr.toLowerCase() == "0xb291984262259bcfe6aa02b66a06e9769c5c1ef3") {
+  } else if (ownerAddr.toLowerCase() === "0xb291984262259bcfe6aa02b66a06e9769c5c1ef3") {
     status = "dungeon"
   }
   openSeaFormattedAttributes.push({
