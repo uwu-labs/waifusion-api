@@ -30,12 +30,12 @@ export const createWaifuObjectFromScrapeDataObject = async (
   const formattedAttributes: any[] = bsc ? attributes.filter((atr: IWaifuAttribute) => atr.value) : formatAttributesFromScrape(attributes);
   
   let status = "freed" 
-  if (!bsc && owner.address === "0x0000000000000000000000000000000000080085") {
+  if (fetchExternal && owner.address === "0x0000000000000000000000000000000000080085") {
     status = "burned"
-  } else if (!bsc && owner.address.toLowerCase() === "0xb291984262259bcfe6aa02b66a06e9769c5c1ef3") {
+  } else if (fetchExternal && owner.address.toLowerCase() === "0xb291984262259bcfe6aa02b66a06e9769c5c1ef3") {
     status = "dungeon"
   }
-  if (!bsc) {
+  if (fetchExternal) {
     formattedAttributes.push({
       trait_type: "Status",
       value: status,
