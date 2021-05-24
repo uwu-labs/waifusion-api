@@ -7,7 +7,7 @@ import path from "path";
 // import BSCWaifuData from '../data/bsc_attribute_scrape.json';
 // import WaifuProvenanceData from '../data/eth_provenance.json';
 
-const waifusDataFile = fs.readFileSync(path.join(__dirname, "/../../data/waifu_attribute_scrape_2.json"));
+const waifusDataFile = fs.readFileSync(path.join(__dirname, "/../../data/eth_attributes_scrape.json"));
 const waifusData = JSON.parse(waifusDataFile.toString());
 
 const bscWaifusDataFile = fs.readFileSync(path.join(__dirname, "/../../data/bsc_attribute_scrape.json"));

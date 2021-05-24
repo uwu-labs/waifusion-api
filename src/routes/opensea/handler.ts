@@ -13,18 +13,18 @@ export const getWaifuByTokenId = async (
     .tokenNameByIndex(waifuId)
     .call({});
   const { attributes } = req.fastify.getWaifuByRevealedIndex(
-    revealedTokenIndex
+    Number(waifuId)
   );
 
   const ownerAddr = await req.fastify.waifusContract.methods
     .ownerOf(waifuId)
     .call({});
     
-  const openSeaFormattedAttributes: any[] = Object.entries(attributes).map(
-    ([trait_type, value]) => {
-      value = ownerAddr === "0x0000000000000000000000000000000000080085" ? "burned" : value;
+  const openSeaFormattedAttributes: any[] = attributes.map(
+    (obj: any) => {
+      let value = ownerAddr === "0x0000000000000000000000000000000000080085" ? "burned" : obj.value;
       return {
-        trait_type,
+        trait_type: obj.trait_type,
         value,
       };
     }
@@ -42,7 +42,7 @@ export const getWaifuByTokenId = async (
   })
 
   const ipfsUrl = `${Config.ETH.IPFS_PREFIX}/${revealedTokenIndex}.png`;
-  const detailUrl = `https://waifusion.io/waifu/${revealedTokenIndex}`;
+  const detailUrl = `https://waifusion.io/waifu/${waifuId}`;
 
   reply.send({
     name,

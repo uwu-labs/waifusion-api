@@ -24,10 +24,12 @@ export const createWaifuObjectFromScrapeDataObject = async (
   const owner = fetchExternal && !bsc ? await getOwnerObjectForTokenId(waifuId) : null;
 
   const { attributes } = prefilledObject || (bsc ? 
-    app.getBSCWaifuByRevealedIndex(Number(waifuId)) : app.getWaifuByRevealedIndex(revealedTokenIndex)
+    app.getBSCWaifuByRevealedIndex(Number(waifuId)) : app.getWaifuByRevealedIndex(Number(waifuId))
   );
+  console.log(attributes)
 
-  const formattedAttributes: any[] = bsc ? attributes.filter((atr: IWaifuAttribute) => atr.value) : formatAttributesFromScrape(attributes);
+  const formattedAttributes: any[] = attributes.filter((atr: IWaifuAttribute) => atr.value);
+  console.log(formattedAttributes)
   
   let status = "freed" 
   if (fetchExternal && owner.address === "0x0000000000000000000000000000000000080085") {
