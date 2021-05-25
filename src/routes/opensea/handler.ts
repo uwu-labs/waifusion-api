@@ -22,13 +22,17 @@ export const getWaifuByTokenId = async (
     
   const openSeaFormattedAttributes: any[] = attributes.map(
     (obj: any) => {
-      let value = ownerAddr === "0x0000000000000000000000000000000000080085" ? "burned" : obj.value;
-      return {
-        trait_type: obj.trait_type,
-        value,
-      };
+      if (ownerAddr !== "0x0000000000000000000000000000000000080085" && obj.value != "") {
+        return {
+          trait_type: obj.trait_type,
+          value: obj.value,
+        };
+      } else {
+        return null
+      }
     }
   );
+  const filteredAttributes = openSeaFormattedAttributes.filter(t => !!t);
 
   let status = "freed" 
   if (ownerAddr === "0x0000000000000000000000000000000000080085") {
@@ -36,7 +40,7 @@ export const getWaifuByTokenId = async (
   } else if (ownerAddr.toLowerCase() === "0xb291984262259bcfe6aa02b66a06e9769c5c1ef3") {
     status = "dungeon"
   }
-  openSeaFormattedAttributes.push({
+  filteredAttributes.push({
     trait_type: "Status",
     value: status,
   })
@@ -49,6 +53,6 @@ export const getWaifuByTokenId = async (
     description: `Waifu #${req.params.waifuId}\n\nYou can claim WET and change your Waifu's name on [waifusion.io](https://waifusion.io).\n\nWaifusion is a community-run digital Waifu NFT project with deflationary mechanics. There are 16,384 guaranteed-unique Waifusion NFTs. They’re just like you; a beautiful work of art, but 2-D and therefore, superior, Anon-kun. Each Waifu is wholly unique and yours forever... unless you sell them... Baka.\n\n**Warning**: Waifu names can change at any time. Immediately before purchasing a Waifu, enter the Waifu's token ID into the tokenNameByIndex function on a site like Etherscan to verify that the blockchain indicates that the Waifu you're purchasing has the name you expect.`,
     image: ipfsUrl,
     external_url: detailUrl,
-    attributes: openSeaFormattedAttributes,
+    attributes: filteredAttributes,
   });
 };
